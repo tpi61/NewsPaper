@@ -1,0 +1,50 @@
+python3 manage.py shell
+
+from news.models import *
+
+usr_1 = User.objects.create_user('Usr_1')
+usr_2 = User.objects.create_user('Usr_2')
+
+auth_1 = Author.objects.create(authUser=usr_1)
+auth_2 = Author.objects.create(authUser=usr_2)
+
+cat_1 = Category.objects.create(name='Auto')
+cat_2 = Category.objects.create(name='Moto')
+cat_3 = Category.objects.create(name='Summer')
+cat_4 = Category.objects.create(name='Spring')
+
+post_1 = Post.objects.create(authors=auth_1, postType='Artics', postHead='Interesting article 1', postBody='XXX')
+post_2 = Post.objects.create(authors=auth_2, postType='Artics', postHead='Interesting article 2', postBody='YYY')
+news_1 = Post.objects.create(authors=auth_1, postType='News', postHead='Interesting news 1', postBody='ZZZ')
+
+post_1.postCategory.add(cat_1)
+post_1.save()
+post_2.postCategory.add(cat_2)
+post_2.save()
+news_1.postCategory.add(cat_3)
+news_1.postCategory.add(cat_1)
+news_1.save()
+
+comm_1 = Comment.objects.create(commentPost=post_1, commentUser=usr_1, commentText='so good')
+comm_2 = Comment.objects.create(commentPost=post_1, commentUser=usr_2, commentText='like a shit')
+
+post_1.like()
+post_1.like()
+
+comm_1.like()
+comm_1.like()
+
+auth_1.update_rating()
+auth_1.authRate
+
+Author.objects.all().order_by('-authRate').values('authUser__username','authRate')[0]
+usr_1 = User.objects.get(username='Usr_1')
+usr_1.date_joined
+
+a = Author.objects.get(authUser__username='Usr_1')
+
+Post.objects.filter(authors=a).order_by('-rate').values('createTime','rate','postHead')[0]
+p = Post.objects.filter(authors=a).order_by('-rate')[0]
+p.preview()
+
+Comment.objects.filter(commentPost=p).values('createTime','commentUser','rate','commentText')
