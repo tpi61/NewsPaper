@@ -8,6 +8,9 @@ class Author(models.Model):
     authUser = models.OneToOneField(User, on_delete = models.CASCADE)
     authRate = models.IntegerField(default = 0)
 
+    def __str__(self) -> str:
+        return f'{self.authUser}'
+
     def update_rating(self):
         postsRate = self.post_set.aggregate(postsRating=Sum('rate'))
         pRating = 0
@@ -49,6 +52,9 @@ class Post(models.Model):
     postHead = models.CharField(max_length = 255)
     postBody = models.TextField()
     rate = models.IntegerField(default = 0)
+
+    def __str__(self) -> str:
+        return f'{self.postHead}'
 
     def like(self):
         self.rate += 1

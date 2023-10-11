@@ -1,0 +1,43 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %} 
+
+
+{% load custom_filters %}
+<!-- Название у нас будет products -->
+{% block title %}
+Posts
+{% endblock title %}
+ 
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+    <h1>All posts {{ posts|length }}</h1>
+    <!-- Используем переданную из представления переменную time_now
+    и применяем к ней фильтр date. По назначению этот фильтр очень похож
+    на метод strftime у объекта datetime в Python — вывод времени
+    в указанном формате. -->
+    <hr>
+    {% if posts %}
+        <table>
+            <tr>
+                <td>title</td>
+                <td>date</td>
+                <td>news</title></td>
+            </tr>
+            
+            <!-- Для каждого товара будете генерироваться новая строчка,
+            т.е. новый HTML код, который указан в теле цикла.
+            При этом сам цикл работает точно так же, как и в Python.
+            product — переменная цикла, т.е. наш товар полученный из списка -->
+            {% for post in posts|dictsortreversed:"createTime" %}
+            <tr>
+                <td>{{ post.postHead|censor }}</td>
+                <td>{{ post.createTime|date:'d M Y' }}</td>
+                <td>{{ post.postBody|truncatewords:20|censor }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    {% else %}
+        <h2>Товаров нет!</h2>
+    {% endif %}
+{% endblock content %}
