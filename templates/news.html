@@ -1,26 +1,17 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %} 
+
 
 {% load custom_filters %}
 {% load custom_tags %}
 
 {% block title %}
-Posts
+All news
 {% endblock title %}
  
 {% block content %}
-    <h1 align="center">All posts</h1>
+    <h1>All {{ post_type }}</h1>
 
-    <form action="" method="get" >
-        
-        {{ filterset.form.non_field_errors }}
-        {{ filterset.form.name__icontains.errors }}
-
-        {{ filterset.form.as_p }}
-
-        <button type="submit" class ="btn btn-primary">Filtern</button>
-
-    </form>
-    <hr>
     <hr>
     {% if posts %}
         <table>
@@ -29,26 +20,26 @@ Posts
                 <td width="2%"></td>
                 <td align="left">title</td>
                 <td width="2%"></td>
-                <td align="left">news</title></td>
+                <td align="left">{{ post_type }}</title></td>
             </tr>
             
             {% for post in posts|dictsortreversed:"createTime" %}
-            <tr>
-                <td align="left" nowrap>{{ post.createTime|date:'d M Y' }}</td>
-                <td width="2%"></td>
-                <td align="left">{{ post.postHead|censor }}</td>
-                <td width="2%"></td>
-                <td align="left">{{ post.postBody|truncatewords:20|censor }}</td>
-            </tr>
+                <tr>
+                    <td align="left" nowrap>{{ post.createTime|date:'d M Y' }}</td>
+                    <td width="2%"></td>
+                    <td align="left">{{ post.postHead|censor }}</td>
+                    <td width="2%"></td>
+                    <td align="left">{{ post.postBody|truncatewords:20|censor }}</td>
+                </tr>
             {% endfor %}
 
         </table>
     {% else %}
-        <h2>No posts!</h2>
+        <h2>No news!</h2>
     {% endif %}
 
 {% if page_obj.has_previous %}
-<a href="?{% url_replace page=1 %}">Fresh posts</a>
+<a href="?{% url_replace page=1 %}">Fresh news</a>
     {% if page_obj.previous_page_number != 1 %}
     ...
     <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
@@ -63,7 +54,7 @@ Posts
     <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
     {% if paginator.num_pages != page_obj.next_page_number %}
         ...
-        <a href="?{% url_replace page=page_obj.paginator.num_pages %}">Old posts</a>
+        <a href="?{% url_replace page=page_obj.paginator.num_pages %}">Old news</a>
     {% endif %}
 {% endif %}
 {% endblock content %}

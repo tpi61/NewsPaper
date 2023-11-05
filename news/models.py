@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.urls import reverse
 
 # Create your models here.
 
@@ -32,20 +33,21 @@ class Author(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
 
+    def __str__(self) -> str:
+        return f'{self.name}'
+
 
 class Post(models.Model):
-    article = 'Artics'
-    news = 'News'
     
     cat_choise = [
-    (article, 'Article'),
-    (news, 'News'),
+    ('Article', 'Article'),
+    ('News', 'News'),
     ]
 
     authors =  models.ForeignKey(Author, on_delete = models.CASCADE)
     postType = models.CharField(max_length=8, 
                             choices = cat_choise, 
-                            default = article)
+                            default = 'Article')
     
     postCategory = models.ManyToManyField(Category, through = 'PostCategory')
     createTime = models.DateTimeField(auto_now_add = True)
@@ -66,6 +68,9 @@ class Post(models.Model):
 
     def preview(self):
         return f"{self.postBody[:123]} ..."
+    
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
 
 class PostCategory(models.Model):

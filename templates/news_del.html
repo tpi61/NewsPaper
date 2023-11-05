@@ -1,0 +1,11 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1>Delete {{ post_type }}</h1>
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Remove "{{ object.postHead }}"?</p>
+    <input type="submit" value="Delete" />
+</form>
+{% endblock content %}
