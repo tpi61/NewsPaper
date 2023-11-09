@@ -4,6 +4,7 @@ from .models import Post
 from .forms import PostForm
 from .filters import PostsFilter
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import PermissionRequiredMixin
 # Create your views here.
 
 class PostsList(ListView):
@@ -101,8 +102,9 @@ class NewsSearch(ListView):
         context['filterset'] = self.filterset
         context['post_type'] = "News"
         return context
-
-class NewsCreate(CreateView):
+#
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     model = Post
     template_name = 'news_create.html'
     form_class = PostForm
@@ -117,7 +119,8 @@ class NewsCreate(CreateView):
         context['post_type'] = "News"
         return context
 
-class NewsEdit(UpdateView):
+class NewsEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     model = Post
     template_name = 'news_create.html'
     form_class = PostForm
@@ -154,7 +157,8 @@ class ArticleList(ListView):
         context['post_type'] = "Article"
         return context
 
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     model = Post
     template_name = 'news_create.html'
     form_class = PostForm
@@ -169,7 +173,8 @@ class ArticleCreate(CreateView):
         context['post_type'] = "Article"
         return context
     
-class ArticleEdit(UpdateView):
+class ArticleEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     model = Post
     template_name = 'news_create.html'
     form_class = PostForm
